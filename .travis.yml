@@ -1,0 +1,12 @@
+addons:
+  apt:
+    packages:
+      - bsdtar
+
+language: ruby
+cache: bundler
+
+script:
+  - bundle exec rake test:all jenkins:job
+
+rvm: 2.4.1
