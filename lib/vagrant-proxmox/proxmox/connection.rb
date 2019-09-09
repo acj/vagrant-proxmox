@@ -256,7 +256,7 @@ module VagrantPlugins
       rescue RestClient::InternalServerError
         raise ApiError::ServerError
       rescue => x
-        raise ApiError::ConnectionError, x.message
+        raise ApiError::ConnectionError, "#{x.message}: #{x.response.body}"
       end
 
       private
