@@ -22,6 +22,7 @@ module VagrantPlugins
         @task_timeout = opts[:task_timeout] || 60
         @task_status_check_interval = opts[:task_status_check_interval] || 2
         @imgcopy_timeout = opts[:imgcopy_timeout] || 120
+        @verify_tls = opts[:verify_tls]
       end
 
       def login(username: required('username'), password: required('password'))
@@ -217,7 +218,7 @@ module VagrantPlugins
       private
 
       def get(path)
-        response = RestClient.get "#{api_url}#{path}", cookies: { PVEAuthCookie: ticket }
+        response = RestClient::Request.execute(method: :get, url: "#{api_url}#{path}", cookies: { PVEAuthCookie: ticket }, verify_ssl: @verify_tls)
         JSON.parse response.to_s, symbolize_names: true
       rescue RestClient::NotImplemented
         raise ApiError::NotImplemented
@@ -232,7 +233,7 @@ module VagrantPlugins
       private
 
       def delete(path, _params = {})
-        response = RestClient.delete "#{api_url}#{path}", headers
+        response = RestClient::Request.execute(method: :delete, url: "#{api_url}#{path}", headers: headers, verify_ssl: @verify_tls)
         JSON.parse response.to_s, symbolize_names: true
       rescue RestClient::Unauthorized
         raise ApiError::UnauthorizedError
@@ -247,7 +248,9 @@ module VagrantPlugins
       private
 
       def post(path, params = {})
-        response = RestClient.post "#{api_url}#{path}", params, headers
+        h = headers
+        h[:params] = params
+        response = RestClient::Request.execute(method: :post, url: "#{api_url}#{path}", headers: h, verify_ssl: @verify_tls)
         JSON.parse response.to_s, symbolize_names: true
       rescue RestClient::Unauthorized
         raise ApiError::UnauthorizedError

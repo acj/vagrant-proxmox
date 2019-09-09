@@ -147,6 +147,7 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'proxmox'
 * `pool` Resource pool to use.
 * `hostname_append_id` Appends guest ID to its' hostname. Note that this effectively sets the hostname to ID, if it was empty beforehand.
 * `full_clone` Creates full clone, instead of a linked one.
+* `verify_tls` Whether to verify ProxMox's TLS certificate (default: true)
 
 ## Debug RestClient Communication with Proxmox-Node
 

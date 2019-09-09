@@ -325,6 +325,12 @@ module VagrantPlugins
       # @return [Boolean]
       attr_accessor :full_clone
 
+      # Verify the TLS certificate returned by ProxMox
+      # defaults to true
+      #
+      # @return [Boolean]
+      attr_accessor :verify_tls
+
       def initialize
         @endpoint = UNSET_VALUE
         @selected_node = UNSET_VALUE
@@ -384,6 +390,7 @@ module VagrantPlugins
         @lxc_ssh_public_keys = UNSET_VALUE
         @hostname_append_id = false
         @full_clone = false
+        @verify_tls = true
       end
 
       # This is the hook that is called to finalize the object before it is put into use.
